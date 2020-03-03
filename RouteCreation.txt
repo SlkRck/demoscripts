@@ -1,0 +1,54 @@
+#Create a Route Table
+#First, create resource group
+New-AzResourceGroup -ResourceGroupName myResourceGroup -Location EastUS
+
+#create a route table to hold the routes
+$routeTablePublic = New-AzRouteTable `
+  -Name 'myRouteTablePublic' `
+  -ResourceGroupName myResourceGroup `
+  -location EastUS
+  
+#Create a route in the table
+Get-AzRouteTable `
+  -ResourceGroupName "myResourceGroup" `
+  -Name "myRouteTablePublic" `
+  | Add-AzRouteConfig `
+  -Name "ToPrivateSubnet" `
+  -AddressPrefix 10.0.1.0/24 `
+  -NextHopType "VirtualAppliance" `
+  -NextHopIpAddress 10.0.2.4 `
+ | Set-AzRouteTable
+ 
+#Create a virtual network -- Before you can associate a route table to a #subnet, you have to create a virtual network and subnet.
+$virtualNetwork = New-AzVirtualNetwork `
+  -ResourceGroupName myResourceGroup `
+  -Location EastUS `
+  -Name myVirtualNetwork `
+  -AddressPrefix 10.0.0.0/16
+
+#Creates three subnet configurations for Public, Private, and DMZ subnets
+$subnetConfigPublic = Add-AzVirtualNetworkSubnetConfig `
+  -Name Public `
+  -AddressPrefix 10.0.0.0/24 `
+  -VirtualNetwork $virtualNetwork
+
+$subnetConfigPrivate = Add-AzVirtualNetworkSubnetConfig `
+  -Name Private `
+  -AddressPrefix 10.0.1.0/24 `
+  -VirtualNetwork $virtualNetwork
+
+$subnetConfigDmz = Add-AzVirtualNetworkSubnetConfig `
+  -Name DMZ `
+  -AddressPrefix 10.0.2.0/24 `
+  -VirtualNetwork $virtualNetwork
+  
+#Write the subnet configurations to the virtual network
+$virtualNetwork | Set-AzVirtualNetwork
+
+#Associate the myRouteTablePublic route table to the Public subnet
+Set-AzVirtualNetworkSubnetConfig `
+  -VirtualNetwork $virtualNetwork `
+  -Name 'Public' `
+  -AddressPrefix 10.0.0.0/24 `
+  -RouteTable $routeTablePublic | `
+Set-AzVirtualNetwork

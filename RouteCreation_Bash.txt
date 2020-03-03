@@ -1,0 +1,48 @@
+#Create a resource group.
+az group create \
+  --name myResourceGroup \
+  --location eastus
+  
+# Create a route table
+az network route-table create \
+  --resource-group myResourceGroup \
+  --name myRouteTablePublic
+  
+#Create a route in the route table
+az network route-table route create \
+  --name ToPrivateSubnet \
+  --resource-group myResourceGroup \
+  --route-table-name myRouteTablePublic \
+  --address-prefix 10.0.1.0/24 \
+  --next-hop-type VirtualAppliance \
+  --next-hop-ip-address 10.0.2.4
+  
+#Before you can associate a route table to a subnet, you have to create a #virtual network and subnet
+az network vnet create \
+  --name myVirtualNetwork \
+  --resource-group myResourceGroup \
+  --address-prefix 10.0.0.0/16 \
+  --subnet-name Public \
+  --subnet-prefix 10.0.0.0/24
+  
+#Create two additional subnets
+#Create a private subnet.
+az network vnet subnet create \
+  --vnet-name myVirtualNetwork \
+  --resource-group myResourceGroup \
+  --name Private \
+  --address-prefix 10.0.1.0/24
+
+#Create a DMZ subnet.
+az network vnet subnet create \
+  --vnet-name myVirtualNetwork \
+  --resource-group myResourceGroup \
+  --name DMZ \
+  --address-prefix 10.0.2.0/24
+  
+ #Associate the myRouteTablePublic route table to the Public subnet
+ az network vnet subnet update \
+  --vnet-name myVirtualNetwork \
+  --name Public \
+  --resource-group myResourceGroup \
+  --route-table myRouteTablePublic
