@@ -1,0 +1,17 @@
+New-AzResourceGroup -Name WebAppResourceGroup -Location westus
+New-AzAppServicePlan -Name WebAppPlan -Location westus -ResourceGroupName WebAppResourceGroup -Tier Free
+New-AzWebApp -Name AZ301Testwebapp -Location westus -AppServicePlan WebAppPlan -ResourceGroupName WebAppResourceGroup
+
+Set-AzAppServicePlan -Name WebAppPlan -ResourceGroupName WebAppResourceGroup -Tier Standard
+New-AzWebAppSlot -Name AZ301Testwebapp -ResourceGroupName WebAppResourceGroup -Slot Staging
+
+$PropertiesObject = @{
+    repoUrl = "https://github.com/Azure-Samples/html-docs-hello-world";
+    branch = "master";
+    isManualIntegration = "true";
+}
+Set-AzResource -PropertyObject $PropertiesObject -ResourceGroupName WebAppResourceGroup -ResourceType Microsoft.Web/sites/slots/sourcecontrols -ResourceName AZ301bwebapp/Staging/web -ApiVersion 2015-08-01 -Force
+
+Swap-AzWebAppSlot -Name AZ301Testwebapp -ResourceGroupName WebAppResourceGroup -SourceSlotName Staging -DestinationSlotName Production
+Remove-AzWebAppSlot -Name AZ301bwebapp -ResourceGroupName WebAppResourceGroup -Slot Staging
+Remove-AzResourceGroup -Name WebAppResourceGroup

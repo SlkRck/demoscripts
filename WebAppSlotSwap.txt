@@ -1,0 +1,17 @@
+az group create --location westus --name WebAppResourceGroup
+az appservice plan create --name WebAppPlan --resource-group WebAppResourceGroup --sku FREE
+az webapp create --name AZ301TestWeb --resource-group WebAppResourceGroup --plan WebAppPlan
+az appservice plan update --name WebAppPlan --resource-group WebAppResourceGroup --sku S1
+az webapp deployment slot create --name AZ301TestWeb --resource-group WebAppResourceGroup --slot Staging
+
+
+az webapp deployment source config --name AZ301TestWebApp \
+--slot Staging \
+--resource-group WebAppResourceGroup \
+--repo-url https://github.com/Azure-Samples/html-docs-hello-world \
+--branch master --manual-integration
+
+az webapp deployment slot swap --name AZ301TestWeb --resource-group WebAppResourceGroup --slot Staging
+
+az webapp deployment slot delete --name AZ301TestWeb --resource-group WebAppResourceGroup --slot Staging
+az group delete --name WebAppResourceGroup
