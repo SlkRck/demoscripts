@@ -1,0 +1,3 @@
+Name,Resource_Group_Name,Next_Hop_Type,Address_Prefix,Disable_BGP_Route_Propagation,Location
+Route1,DemoRG-001,vnetlocal,10.127.7.0/24,false,West US
+Route2,DemoRG-002,vnetlocal,10.127.8.0/24,false,West US

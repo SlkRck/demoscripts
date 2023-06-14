@@ -1,0 +1,3 @@
+Name,Resource_Group_Name,Location,Address_Space
+vnet-demo-001,DemoRG-001,WEST US,10.127.7.0/24
+vnet-demo-002,DemoRG-002,WEST US,10.127.8.0/24

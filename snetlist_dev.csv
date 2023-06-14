@@ -1,0 +1,9 @@
+Resource_Group_Name,Name,Address_Prefix,Subnet_Name,Address_Space,Location
+DemoRG-001,vnet-demo-001,10.127.7.0/26,subnet-demo-001,10.127.7.0/24,WEST US
+DemoRG-001,vnet-demo-001,10.127.7.64/27,subnet-demo-002,10.127.7.0/24,WEST US
+DemoRG-001,vnet-demo-001,10.127.7.96/27,subnet-demo-003,10.127.7.0/24,WEST US
+DemoRG-001,vnet-demo-001,10.127.7.128/27,subnet-demo-004,10.127.7.0/24,WEST US
+DemoRG-002,vnet-demo-002,10.127.8.0/26,subnet-demo-005,10.127.8.0/24,WEST US
+DemoRG-002,vnet-demo-002,10.127.8.64/26,subnet-demo-006,10.127.8.0/24,WEST US
+DemoRG-002,vnet-demo-002,10.127.8.128/27,subnet-demo-007,10.127.8.0/24,WEST US
+DemoRG-002,vnet-demo-002,10.127.8.160/27,subnet-demo-008,10.127.8.0/24,WEST US
