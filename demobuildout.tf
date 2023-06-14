@@ -1,7 +1,7 @@
 #AzureRM_RG_Terraform_template for testing#
 provider "azurerm" {
-    subscription_id="5246a658-81a5-4e56-9434-7eac0eb13478"
-    tenant_id="94d54851-b213-4ebc-8787-6e58d3ee975b"
+    subscription_id="08201627-2ef3-4df3-be6f-9ddd7bea136b"
+    tenant_id="20c5dd07-d38c-454a-80e4-c1799be03751"
     version = "~>2.1.0"
     features{}
   }
